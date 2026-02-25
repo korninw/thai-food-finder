@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>อร่อยทั่วไทย - ร้านอาหารอร่อยราคาถูก</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo" onclick="showHome()">
+        <span class="logo-icon">🍜</span>
+        <div>
+          <div class="logo-title">อร่อยทั่วไทย</div>
+          <div class="logo-sub">ร้านอาหารอร่อย ราคาถูก ทุกจังหวัด</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn active" onclick="showHome()">หน้าแรก</button>
+        <button class="nav-btn" onclick="showAllProvinces()">ทุกจังหวัด</button>
+        <button class="nav-btn" onclick="showAbout()">เกี่ยวกับเรา</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- PAGE: HOME -->
+  <div id="page-home">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">ค้นหาร้านอาหารอร่อย<br/><span class="highlight">ราคาเป็นมิตร</span> ทั่วประเทศไทย</h1>
+        <p class="hero-desc">รวมร้านอาหารอร่อย ราคาถูก คัดสรรมาเป็นพิเศษ แต่ละจังหวัด แต่ละเขต ทั่วประเทศไทย</p>
+        <div class="search-bar">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="hero-search" placeholder="ค้นหาร้านอาหาร หรือจังหวัด..." oninput="handleHeroSearch(this.value)" />
+          <button class="search-btn" onclick="handleHeroSearchBtn()">ค้นหา</button>
+        </div>
+        <div id="hero-search-results" class="hero-search-results hidden"></div>
+      </div>
+      <div class="hero-visual">
+        <div class="food-grid">
+          <div class="food-icon-card">🍛</div>
+          <div class="food-icon-card">🍜</div>
+          <div class="food-icon-card">🍱</div>
+          <div class="food-icon-card">🥘</div>
+          <div class="food-icon-card">🍢</div>
+          <div class="food-icon-card">🥗</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num" id="stat-provinces">0</div>
+        <div class="stat-label">จังหวัด</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-districts">0</div>
+        <div class="stat-label">เขต/อำเภอ</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="stat-restaurants">0</div>
+        <div class="stat-label">ร้านอาหาร</div>
+      </div>
+    </section>
+
+    <!-- FEATURED PROVINCES -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">เลือกจังหวัด</h2>
+        <p class="section-desc">คลิกเลือกจังหวัดที่สนใจเพื่อดูร้านอาหารแนะนำ</p>
+      </div>
+      <div class="province-filter-bar">
+        <button class="region-btn active" onclick="filterRegion('all', this)">ทั้งหมด</button>
+        <button class="region-btn" onclick="filterRegion('north', this)">ภาคเหนือ</button>
+        <button class="region-btn" onclick="filterRegion('northeast', this)">ภาคอีสาน</button>
+        <button class="region-btn" onclick="filterRegion('central', this)">ภาคกลาง</button>
+        <button class="region-btn" onclick="filterRegion('east', this)">ภาคตะวันออก</button>
+        <button class="region-btn" onclick="filterRegion('west', this)">ภาคตะวันตก</button>
+        <button class="region-btn" onclick="filterRegion('south', this)">ภาคใต้</button>
+      </div>
+      <div id="province-grid" class="province-grid"></div>
+    </section>
+
+    <!-- POPULAR RESTAURANTS -->
+    <section class="section section-alt">
+      <div class="section-header">
+        <h2 class="section-title">ร้านยอดนิยม</h2>
+        <p class="section-desc">ร้านอาหารที่ได้รับความนิยมสูงสุดทั่วประเทศ</p>
+      </div>
+      <div id="popular-grid" class="restaurant-grid"></div>
+    </section>
+  </div>
+
+  <!-- PAGE: PROVINCE -->
+  <div id="page-province" class="hidden">
+    <div class="page-header">
+      <button class="back-btn" onclick="showHome()">← กลับหน้าแรก</button>
+      <div id="province-breadcrumb" class="breadcrumb"></div>
+    </div>
+    <div class="province-hero" id="province-hero-section">
+      <div class="province-hero-content">
+        <div class="province-emoji" id="province-page-emoji"></div>
+        <h1 id="province-page-title"></h1>
+        <p id="province-page-desc"></p>
+        <div class="province-page-stats" id="province-page-stats"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="district-tabs-wrapper">
+        <div class="section-header">
+          <h2 class="section-title">เลือกเขต / อำเภอ</h2>
+        </div>
+        <div id="district-tabs" class="district-tabs"></div>
+      </div>
+      <div class="district-search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="district-search" placeholder="ค้นหาร้านในจังหวัดนี้..." oninput="filterDistrictRestaurants(this.value)" />
+      </div>
+      <div id="district-restaurants" class="restaurant-grid"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: ALL PROVINCES -->
+  <div id="page-all-provinces" class="hidden">
+    <div class="page-header">
+      <button class="back-btn" onclick="showHome()">← กลับหน้าแรก</button>
+    </div>
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">ทุกจังหวัดในประเทศไทย</h2>
+        <p class="section-desc">77 จังหวัดทั่วประเทศ</p>
+      </div>
+      <div id="all-province-grid" class="province-grid"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: ABOUT -->
+  <div id="page-about" class="hidden">
+    <div class="section">
+      <div class="about-container">
+        <h1>เกี่ยวกับ อร่อยทั่วไทย</h1>
+        <div class="about-card">
+          <div class="about-icon">🍜</div>
+          <h3>พันธกิจของเรา</h3>
+          <p>เราต้องการรวบรวมร้านอาหารอร่อย ราคาถูก ที่ซ่อนอยู่ตามซอกซอยทั่วประเทศไทย ให้ทุกคนค้นหาได้ง่ายๆ</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">⭐</div>
+          <h3>เกณฑ์การคัดเลือก</h3>
+          <p>ทุกร้านได้รับการคัดสรรโดยพิจารณาจาก รสชาติ ราคา ความสะอาด และความนิยมจากชาวบ้านในพื้นที่</p>
+        </div>
+        <div class="about-card">
+          <div class="about-icon">📍</div>
+          <h3>ครอบคลุมทั่วประเทศ</h3>
+          <p>ข้อมูลร้านอาหารครบ 77 จังหวัด แยกตามเขต/อำเภอ พร้อมข้อมูลที่อยู่ ราคา และเวลาเปิดปิด</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RESTAURANT DETAIL -->
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="closeModal()">
+    <div class="modal" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">🍜 อร่อยทั่วไทย</div>
+      <p>รวมร้านอาหารอร่อย ราคาถูก ทั่วประเทศไทย</p>
+      <p class="footer-note">© 2026 อร่อยทั่วไทย | ข้อมูลอาจมีการเปลี่ยนแปลง กรุณาตรวจสอบกับร้านโดยตรง</p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
